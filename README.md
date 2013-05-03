@@ -1,4 +1,5 @@
 raytracer
 =========
 
-Raytracer written in c for the Computer Graphics class at ITCR
+Raytracer written in c.
+It will have bump mapping, antialiasing, reflection and stuff
