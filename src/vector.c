@@ -32,3 +32,23 @@ Vector normalize(Vector vector)
 {
     return normalize_with_norm(vector, norm(vector));
 }
+
+Vector cross_product(Vector v, Vector w)
+{
+    Vector product;
+    product.X = (v.Y * w.Z) - (v.Z * w.Y);
+    product.Y = (v.Z * w.X) - (v.X * w.Z);
+    product.Z = (v.X * w.Y) - (v.Y * w.X);
+    
+    return product;
+}
+
+Vector scalar_multiplication(Vector v, long double factor)
+{
+    Vector scaled;
+    scaled.X = v.X * factor;
+    scaled.Y = v.Y * factor;
+    scaled.Z = v.Z * factor;
+    
+    return scaled;
+}

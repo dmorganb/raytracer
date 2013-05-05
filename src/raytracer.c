@@ -1,6 +1,29 @@
+#include <stdio.h>
 #include "raytracer.h"
 
-Dot get_pixel(int i, int j) 
+/*Assumes direction is a unitary vector*/
+Dot translate(Dot dot, Vector direction, long double magnitude)
+{
+    Vector t = scalar_multiplication(direction, magnitude);
+    Dot translated;
+    
+    translated.X = dot.X + t.X;
+    translated.Y = dot.X + t.Y;
+    translated.Z = dot.X + t.Z;
+    
+    return translated;
+}
+
+Dot nvu_xyz(Dot nvu)
+{
+    Dot xyz = translate(Settings.Vrp, Settings.Vrc_n, nvu.Z);
+    xyz = translate(xyz, Settings.Vrc_u, nvu.Y);
+    xyz = translate(xyz, Settings.Vrc_v, nvu.X);
+    
+    return xyz;
+}
+
+Dot get_window_dot(int i, int j) 
 {
     Dot w;
 
@@ -12,11 +35,9 @@ Dot get_pixel(int i, int j)
     w.Y *= (Settings.Window_max.Y - Settings.Window_min.Y);
     w.Y += Settings.Window_min.Y;
 
-    w.Z = ((long double)(i) + 0.5) / (long double)(Settings.Framebuffer_height);
-    w.Z *= (Settings.Window_max.Y - Settings.Window_min.Y);
-    w.Z += Settings.Window_min.Y;
+    w.Z = 0.0;
     
-    return w;
+    return nvu_xyz(w);
 }
 
 Color get_color(Dot dot, Vector ray)
@@ -27,11 +48,23 @@ Color get_color(Dot dot, Vector ray)
 
 Color explore(Dot dot)
 {
-    Dot eye;
+    Dot eye = nvu_xyz(Settings.Eye);
     Vector ray = vector(eye, dot);
     ray = normalize(ray);
 
     return (get_color(eye, ray));
+}
+
+void plot(int i, int j, Color color)
+{
+    if((0 <= i && i < Settings.Framebuffer_height) && (0 <= j && j < Settings.Framebuffer_width))
+    {
+        Framebuffer[i][j] = color;
+    }
+    else
+    {
+        fprintf(stderr, "error: plot: i = %i, j = %i\n", i, j);
+    }
 }
 
 void raytracer()
@@ -42,8 +75,9 @@ void raytracer()
     {
         for (j = 0; j < Settings.Framebuffer_width; j++)
         {
-            Dot w = get_pixel(i, j);
+            Dot w = get_window_dot(i, j);
             Color color = explore(w);
+            plot(i, j, color);
         }
     }
 }
