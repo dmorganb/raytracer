@@ -43,12 +43,15 @@ typedef struct
 extern AppSettings Settings;
 extern Color** Framebuffer;
 
+Vector vector_create(long double x, long double y, long double z);
 Vector vector(Dot a, Dot b);
 long double norm(Vector v);
-Vector normalize_with_norm(Vector vector, long double norm);
 Vector normalize(Vector vector);
 Vector cross_product(Vector, Vector);
 Vector scalar_multiplication(Vector v, long double factor);
+
+void framebuffer_create();
+void framebuffer_destroy();
 
 void raytracer();
 #endif

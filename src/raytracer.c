@@ -8,8 +8,8 @@ Dot translate(Dot dot, Vector direction, long double magnitude)
     Dot translated;
     
     translated.X = dot.X + t.X;
-    translated.Y = dot.X + t.Y;
-    translated.Z = dot.X + t.Z;
+    translated.Y = dot.Y + t.Y;
+    translated.Z = dot.Z + t.Z;
     
     return translated;
 }
@@ -36,7 +36,8 @@ Dot get_window_dot(int i, int j)
     w.Y += Settings.Window_min.Y;
 
     w.Z = 0.0;
-    
+    printf("w en nvu = (%Lf, %Lf, %Lf)\n", w.X, w.Y, w.Z);
+       
     return nvu_xyz(w);
 }
 
@@ -77,6 +78,8 @@ void raytracer()
         {
             Dot w = get_window_dot(i, j);
             Color color = explore(w);
+            printf("i = %i, j=%i\n", i, j);
+            printf("w = (%Lf, %Lf, %Lf)\n", w.X, w.Y, w.Z);
             plot(i, j, color);
         }
     }
